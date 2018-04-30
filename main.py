@@ -29,14 +29,12 @@ auth = tweepy.OAuthHandler(consumer_key=consumerKey, consumer_secret=consumerSec
 auth.set_access_token(accessToken, accessTokenSecret)
 api = tweepy.API(auth)
 
-# what tweets to find and how many
-searchTerm = input("Enter keyword/hashtag to search about: ")
-noOfSearchTerms = int(input("Enter how many tweets to analyze: "))
-
 #query to find tweets
-tweets = tweepy.Cursor(api.search, q=searchTerm, result_type="recent", lang="es", tweet_mode="extended").items(noOfSearchTerms)
+tweets = tweepy.Cursor(api.search, q='#YaSabesQuien', result_type="recent", lang="es", tweet_mode="extended").items(100)
 
-anaya = list(db.candidates.find({'username':'@joseameadek'})) 
+candidate = '@lopezobrador_'
+
+anaya = list(db.candidates.find({'username':candidate})) 
 tweetFromDB = anaya[0]
 old_positive_tweets = tweetFromDB['positive_tweets']
 old_neutral_tweets = tweetFromDB['neutral_tweets']
@@ -72,7 +70,7 @@ for tweet in tweets:
         negative_tweets = negative_tweets + 1
 
     db.candidates.update(
-    { 'username': '@joseameadek' },
+    { 'username': candidate },
     {
     '$set':
         {
@@ -94,7 +92,7 @@ new_neutral_tweets = old_neutral_tweets + neutral_tweets
 new_negative_tweets = old_negative_tweets + negative_tweets
 
 db.candidates.update(
-    { 'username': '@joseameadek' },
+    { 'username': candidate },
     {
     '$set':
         {
