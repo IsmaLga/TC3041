@@ -10,10 +10,11 @@ import VueRouter from 'vue-router'
 import SuiVue from 'semantic-ui-vue'
 //import semantic-ui-vue-css
 import 'semantic-ui-css/semantic.min.css'
+import Tweet from 'vue-tweet-embed/tweet'
 //tell vue to use the router
 Vue.use(VueRouter)
 Vue.use(SuiVue)
-
+Vue.component('Tweet', Tweet)
 //define your routes
 //import the hello component
 import HelloWorld from './components/HelloWorld'
@@ -23,9 +24,6 @@ import Meade from './components/candidates/Meade'
 import Anaya from './components/candidates/Anaya'
 import Zavala from './components/candidates/Zavala'
 import Bronco from './components/candidates/Bronco'
-
-
-
 //define your routes
 const routes = [
 //define the root url of the application.
