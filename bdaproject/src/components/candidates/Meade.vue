@@ -29,19 +29,131 @@
       <a href="https://meade18.com/">www.meade18.com</a>
     </div>
     </div>
+    <p>positive tweets: {{positive_tweets}} {{dates}}</p>
     <canvas id="planet-chart"></canvas>
   </div>
 </template>
 
 <script>
 import Chart from 'chart.js';
-import planetChartData from './chart-data.js';
-
-
+import axios from 'axios';
 
 export default {
-  name: 'app',
+  name: 'Meade',
+  data() {
+    return {
+      negative_tweets: 0,
+      neutral_tweets: 0,
+      positive_tweets: 0,
+      total_tweets: 0,
+      candidate_data: null,
+      dates: [],
+      qPositive_tweets: [],
+      qNegative_tweets: [],
+      qNeutral_tweets: [],
+      planetChartData: null
+    };
+  },
   methods: {
+    getCandidateInfo() {
+      axios
+        .get(`http://localhost:3000/candidates/joseameadek`)
+        .then(response => {
+          this.candidate_data = response.data;
+          console.log(this.candidate_data);
+          this.negative_tweets = this.candidate_data[0].negative_tweets;
+          this.neutral_tweets = this.candidate_data[0].neutral_tweets;
+          this.positive_tweets = this.candidate_data[0].positive_tweets;
+          this.total_tweets =
+            this.negative_tweets + this.neutral_tweets + this.positive_tweets;
+          this.getTweetsQuantity();
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+    getDates() {
+      axios
+        .get('http://localhost:3000/dates')
+        .then(response => {
+          response.data.forEach(date => {
+            this.dates.push(date.date);
+          });
+          this.setChartParameters();
+          this.createChart('planet-chart', this.planetChartData);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    getTweetsQuantity() {
+      this.dates.forEach(date => {
+        var positiveCont = 0;
+        var neutralCont = 0;
+        var negativeCont = 0;
+        this.candidate_data[0].tweets.forEach(tweet => {
+          if (tweet.date == date) {
+            if (tweet.sentiment == 'positive') {
+              positiveCont = positiveCont + 1;
+            }
+            else if (tweet.sentiment == 'neutral') {
+              neutralCont = neutralCont + 1;
+            }
+            else if (tweet.sentiment == 'negative') {
+              negativeCont = negativeCont + 1;
+            }
+          }
+        });
+        this.qPositive_tweets.push(positiveCont);
+        this.qNeutral_tweets.push(neutralCont);
+        this.qNegative_tweets.push(negativeCont);
+      });
+    },
+    setChartParameters() {
+      this.planetChartData = {
+        type: 'line',
+        data: {
+          labels: this.dates,
+          datasets: [
+            {
+              // positive tweets
+              label: 'Positive Opinion (in tweets)',
+              data: this.qPositive_tweets,
+              borderColor: ['#4784b7'],
+              borderWidth: 3
+            },
+            {
+              // neutral tweets
+              label: 'Neutral Opinion (in tweets)',
+              data: this.neutral_tweets,
+              borderColor: ['#47b784'],
+              borderWidth: 3
+            },
+            {
+              // negative tweets
+              label: 'Negative Opinion (in tweets)',
+              data: this.qNegative_tweets,
+              borderColor: ['#b74747'],
+              borderWidth: 3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          lineTension: 1,
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                  padding: 25
+                }
+              }
+            ]
+          }
+        }
+      };
+    },
     createChart(chartId, chartData) {
       const ctx = document.getElementById(chartId);
       const myChart = new Chart(ctx, {
@@ -51,14 +163,11 @@ export default {
       });
     }
   },
-  data() {
-    return {
-      planetChartData: planetChartData
-    };
+  created() {
+    this.getCandidateInfo();
+    this.getDates();
   },
-  mounted() {
-    this.createChart('planet-chart', this.planetChartData);
-  }
+  mounted() {}
 };
 </script>
 <!-- styling for the component -->

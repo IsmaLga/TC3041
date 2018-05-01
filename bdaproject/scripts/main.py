@@ -44,6 +44,7 @@ tweets_cuantity = len(tweetFromDB['tweets']) - 1
 positive_tweets = 0
 negative_tweets = 0
 neutral_tweets = 0
+tweet_sentiment = ''
 
 for tweet in tweets:
 
@@ -64,10 +65,13 @@ for tweet in tweets:
     sentiment = indicoio.sentiment_hq(translated_text)
     if(sentiment > 0.8):
         positive_tweets = positive_tweets + 1
+        tweet_sentiment = 'positive'
     elif(sentiment > 0.5 and sentiment < 0.8):
         neutral_tweets = neutral_tweets + 1
+        tweet_sentiment = 'neutral'
     elif(sentiment < 0.5):
         negative_tweets = negative_tweets + 1
+        tweet_sentiment = 'negative'
 
     db.candidates.update(
     { 'username': candidate },
@@ -81,6 +85,7 @@ for tweet in tweets:
             'retweet_count': tweet.retweet_count,
             'text': tweet_text,
             'date': time.strftime("%d/%m/%Y"),
+            'sentiment': tweet_sentiment,
             'url': tweet_url
         }
         }
