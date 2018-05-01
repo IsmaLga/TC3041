@@ -35,7 +35,25 @@
       <a href="http://www.proyecto18.mx/">www.proyecto18.mx</a>
     </div>
     </div>
+  <h2 class="ui header">Resumen de Actividad en Twitter</h2>
+    <div class="ui left aligned middle aligned three column grid container">
+      <div class="ui six wide column">
+        <h5 class="ui header">Número de tweets analizados:</h5>
+        <h5 class="ui header">Número de tweets positivos encontrados:</h5>
+        <h5 class="ui header">Número de tweets negativos encontrados:</h5>
+        <h5 class="ui header">Número de tweets neutrales encontrados:</h5>
+        <h5 class="ui header">Número de veces que los tweets fueron marcados como favorito:</h5>
+        <h5 class="ui header">Número de veces que los tweets fueron retweeteados:</h5>
 
+      </div>
+      <div class="ui five wide column">
+        <Tweet :id="'990315832826912770'"></Tweet>
+      </div>
+      <div class="ui five wide column">
+        <Tweet :id="'989944808461520897'"></Tweet>
+      </div>
+
+    </div>
   </div>
 </template>
 

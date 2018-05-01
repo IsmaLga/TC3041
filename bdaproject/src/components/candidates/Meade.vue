@@ -36,13 +36,91 @@
       <a href="https://meade18.com/">www.meade18.com</a>
     </div>
     </div>
+  <h2 class="ui header">Análisis de Tweets</h2>
+  <canvas id="planet-chart"></canvas>
+  <h2 class="ui header">Resumen de Actividad en Twitter</h2>
+    <div class="ui left aligned middle aligned three column grid container">
+      <div class="ui six wide column">
+        <h5 class="ui header">Número de tweets analizados:</h5>
+        <h5 class="ui header">Número de tweets positivos encontrados:</h5>
+        <h5 class="ui header">Número de tweets negativos encontrados:</h5>
+        <h5 class="ui header">Número de tweets neutrales encontrados:</h5>
+        <h5 class="ui header">Número de veces que los tweets fueron marcados como favorito:</h5>
+        <h5 class="ui header">Número de veces que los tweets fueron retweeteados:</h5>
 
+      </div>
+      <div class="ui five wide column">
+        <Tweet :id="'990315832826912770'"></Tweet>
+      </div>
+      <div class="ui five wide column">
+        <Tweet :id="'989944808461520897'"></Tweet>
+      </div>
+
+    </div>
   </div>
 </template>
 
 <script>
+import Chart from 'chart.js';
 export default {
-  name: 'about'
+  name: 'about',
+  data(){
+    return {
+      planetChartData: {
+        type: 'line',
+        data: {
+          labels: [
+            'Mercury',
+            'Venus',
+            'Earth',
+            'Mars',
+            'Jupiter',
+            'Saturn',
+            'Uranus',
+            'Neptune'
+          ],
+          datasets: [
+            {
+              // another line graph
+              label: 'Planet Mass (x1,000 km)',
+              data: [4.8, 12.1, 12.7, 6.7, 139.8, 116.4, 50.7, 49.2],
+              backgroundColor: [
+                'rgba(71, 183,132,.5)' // Green
+              ],
+              borderColor: ['#47b784'],
+              borderWidth: 3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          lineTension: 1,
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                  padding: 25
+                }
+              }
+            ]
+          }
+        }
+      }
+    }},
+    methods: {
+      createChart(chartId, chartData) {
+        const ctx = document.getElementById(chartId);
+        const myChart = new Chart(ctx, {
+          type: chartData.type,
+          data: chartData.data,
+          options: chartData.options
+        });
+      },
+      mounted() {
+        this.createChart('planet-chart', this.planetChartData);
+      }
+    }
 }
 </script>
 <!-- styling for the component -->
