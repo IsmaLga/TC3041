@@ -1,6 +1,12 @@
 
 #tweepy api
-import sys, tweepy
+import sys, tweepy, time
+
+#mongo library
+import pymongo
+from pymongo import MongoClient
+client = MongoClient('localhost', 27017)
+db = client.elections_2018
 
 #google translator to translate
 from googletrans import Translator
@@ -23,53 +29,75 @@ auth = tweepy.OAuthHandler(consumer_key=consumerKey, consumer_secret=consumerSec
 auth.set_access_token(accessToken, accessTokenSecret)
 api = tweepy.API(auth)
 
-# what tweets to find and how many
-searchTerm = input("Enter keyword/hashtag to search about: ")
-noOfSearchTerms = int(input("Enter how many tweets to analyze: "))
+#query to find tweets
+tweets = tweepy.Cursor(api.search, q='#YaSabesQuien', result_type="recent", lang="es", tweet_mode="extended").items(100)
 
-tweets = tweepy.Cursor(api.search, q=searchTerm, result_type="recent", lang="es", tweet_mode="extended").items(noOfSearchTerms)
+candidate = '@lopezobrador_'
 
-username = ''
-retweeted = False;
-retweeted_times = 0
-tweet_text= ''
-cleaned_tweet = ''
+anaya = list(db.candidates.find({'username':candidate})) 
+tweetFromDB = anaya[0]
+old_positive_tweets = tweetFromDB['positive_tweets']
+old_neutral_tweets = tweetFromDB['neutral_tweets']
+old_negative_tweets = tweetFromDB['negative_tweets']
+
+tweets_cuantity = len(tweetFromDB['tweets']) - 1
 positive_tweets = 0
-negative_tweet = 0
+negative_tweets = 0
 neutral_tweets = 0
 
 for tweet in tweets:
+
+    tweet_url = 'https://twitter.com/statuses/'+ tweet.id_str
+
     username = tweet.user.screen_name
+    coordinates = tweet.place
     retweeted = 'retweeted_status' in dir(tweet)
     retweeted_times = tweet.retweet_count
+
     if(retweeted):
         tweet_text = tweet.retweeted_status.full_text
     else:
         tweet_text = tweet.full_text
-    
+        
     cleaned_tweet = tweetFormater.cleanText(tweet_text)
-    # print("tweet username: " + username)
-    # print("Tweet Text: " + cleaned_tweet)
-    # print("tweet retuits: " + str(retweeted_times))
-    # print("SENTIMENT: " + str(indicoio.sentiment(cleaned_tweet, language="SPANISH")))
-    translated_text = translator.translate(cleaned_tweet)
-    sentiment = indicoio.sentiment_hq(translated_text.text)
+    translated_text = translator.translate(cleaned_tweet).text
+    sentiment = indicoio.sentiment_hq(translated_text)
     if(sentiment > 0.8):
         positive_tweets = positive_tweets + 1
-        print("----------------------------")
-        print("Tweet Text: " + tweet_text)
-        print("----------POSITIVE----------")
     elif(sentiment > 0.5 and sentiment < 0.8):
         neutral_tweets = neutral_tweets + 1
-        print("----------------------------")
-        print("Tweet Text: " + tweet_text)
-        print("----------NEUTRAL-----------")
     elif(sentiment < 0.5):
-        negative_tweet = negative_tweet + 1
-        print("----------------------------")
-        print("Tweet Text: " + tweet_text)
-        print("----------NEGATIVE----------")
-    
-print ("Positive tweets: " + str(positive_tweets))
-print ("Neutral tweets: " + str(neutral_tweets))
-print ("Negative tweets: " + str(negative_tweet))
+        negative_tweets = negative_tweets + 1
+
+    db.candidates.update(
+    { 'username': candidate },
+    {
+    '$set':
+        {
+        "tweets."+str(tweets_cuantity+1): { 
+            'username': username,
+            'verified_account': tweet.user.verified,
+            'favorite_count': tweet.favorite_count,
+            'retweet_count': tweet.retweet_count,
+            'text': tweet_text,
+            'date': time.strftime("%d/%m/%Y"),
+            'url': tweet_url
+        }
+        }
+    })
+    tweets_cuantity = tweets_cuantity + 1
+
+new_positive_tweets = old_positive_tweets + positive_tweets
+new_neutral_tweets = old_neutral_tweets + neutral_tweets
+new_negative_tweets = old_negative_tweets + negative_tweets
+
+db.candidates.update(
+    { 'username': candidate },
+    {
+    '$set':
+        {
+        'positive_tweets': new_positive_tweets,
+        'neutral_tweets': new_neutral_tweets,
+        'negative_tweets': new_negative_tweets
+        }
+    })
