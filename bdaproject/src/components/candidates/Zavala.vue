@@ -1,5 +1,12 @@
 <template>
   <div class="grid container">
+    <div class="ui buttons">
+      <button class="ui button" onclick="javascript:window.location='/AMLO'">Andrés Manuel Lopez Obrador</button>
+      <button class="ui button" onclick="javascript:window.location='/Bronco'" >Jaime Rodríguez Calderón</button>
+      <button class="ui button" onclick="javascript:window.location='/Meade'">José Antonio Meade K.</button>
+      <button class="ui button" onclick="javascript:window.location='/Zavala'">Margarita Zavala Gómez</button>
+      <button class="ui button" onclick="javascript:window.location='/Anaya'">Ricardo Anaya Cortés</button>
+    </div>
     <h1 class="ui header">Margarita Zavala Gómez</h1>
     <h2 class="ui header">Candidata Independiente</h2>
     <br>
@@ -14,18 +21,18 @@
           En su carrera como servidor público ha sido diputado local de la LVI Legislatura del Estado de Querétaro, Subsecretario de Planeación Turística de la Secretaría de Turismo en la administración de Felipe Calderón y Diputado Federal de la LXII Legislatura durante el periodo 2012 - 2015 por el Estado de Querétaro. 
       </p>
       <p>
-        Es candidato a la presidencia de México por la coalición Por México Al Frente conformada por el Partido Acción Nacional (PAN), el Partido de la Revolución Democrática (PRD) y el Partido Movimiento Ciudadano (MC).​
+        Es candidata a la presidencia de México por la vía independiente, su registro fue realizado de acuerdo al proceso de recolección de firmas del INE.​
       </p>
     </div>
     <div class="column">
       <h5 class="ui header">Experiencia Relevante:</h5>
-      <p> Presidente del PAN, Diputado Federal por Querétaro.</p>
+      <p> Directora Jurídica del Comité Ejecutivo Nacional del PAN, Presidenta del DIF durante 2006-2012.</p>
       <h5 class="ui header">Educación:</h5>
-      <p>Doctor en Ciencias Políticas y Sociales, UNAM. Licenciatura en Derecho, Universidad Autónoma de Querétaro.</p>
+      <p>Licenciatura en Derecho, Escuela Libre de Derecho.</p>
       <h5 class="ui header">Twitter:</h5>
-      <a href="https://twitter.com/RicardoAnayaC">@RicardoAnayaC</a>
+      <a href="https://twitter.com/Mzavalagc">@Mzavalagc</a>
       <h5 class="ui header">Sitio web de la plataforma política:</h5>
-      <a href="https://ricardoanaya.com.mx/">www.ricardoanaya.com.mx</a>
+      <a href="http://www.margaritazavala.com">www.margaritazavala.com</a>
     </div>
     </div>
 

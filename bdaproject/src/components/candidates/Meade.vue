@@ -1,5 +1,12 @@
 <template>
   <div class="grid container">
+    <div class="ui buttons">
+      <button class="ui button" onclick="javascript:window.location='/AMLO'">Andrés Manuel Lopez Obrador</button>
+      <button class="ui button" onclick="javascript:window.location='/Bronco'" >Jaime Rodríguez Calderón</button>
+      <button class="ui button" onclick="javascript:window.location='/Meade'">José Antonio Meade K.</button>
+      <button class="ui button" onclick="javascript:window.location='/Zavala'">Margarita Zavala Gómez</button>
+      <button class="ui button" onclick="javascript:window.location='/Anaya'">Ricardo Anaya Cortés</button>
+    </div>
     <h1 class="ui header">José Antonio Meade Kuribreña</h1>
     <h2 class="ui header">Candidato a la Presidencia de la Coaliación Todos por México (PRI - Partido Verde - Nueva Alianza)</h2>
     <br>
