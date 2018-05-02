@@ -30,9 +30,9 @@ auth.set_access_token(accessToken, accessTokenSecret)
 api = tweepy.API(auth)
 
 #query to find tweets
-tweets = tweepy.Cursor(api.search, q='Margarita Zavala', result_type="recent", lang="es", tweet_mode="extended").items(100)
+tweets = tweepy.Cursor(api.search, q='@ricardoanayac', result_type="recent", lang="es", tweet_mode="extended").items(100)
 
-candidate = '@Mzavalagc'
+candidate = '@ricardoanayac'
 
 anaya = list(db.candidates.find({'username':candidate})) 
 tweetFromDB = anaya[0]

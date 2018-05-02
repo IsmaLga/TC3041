@@ -13,9 +13,9 @@ class Tweet_Format:
         return re.findall(r'#(\w+)', text)
     @staticmethod
     def get_emojis(text):
-        emojis_list = map(lambda x: ''.join(x.split()), emoji.UNICODE_EMOJI.keys())
-        r = re.compile('|'.join(re.escape(p) for p in emojis_list))
-        return list(set(r.findall(text)))
+        emojis = re.findall(r'[^\w\s,]', text)
+        print(emojis)
+        return emojis
     @staticmethod
     def remove_hashtags(text):
         for hashtag in Tweet_Format.get_hashtags(text):
