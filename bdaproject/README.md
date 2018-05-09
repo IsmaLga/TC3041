@@ -8,6 +8,9 @@ Advanced Database Systems @ Tecnológico de Monterrey
 ## Build Setup
 
 ``` bash
+# change to prject directory
+cd bdaproject
+
 # install dependencies
 npm install
 
